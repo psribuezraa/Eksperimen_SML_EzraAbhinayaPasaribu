@@ -87,3 +87,14 @@ if __name__ == '__main__':
     
     # Jalankan server API Flask di port 5000
     app.run(host='0.0.0.0', port=5000)
+
+# Pastikan Counter didefinisikan di atas
+churn_count = Counter('model_churn_predicted_count_total', '...')
+no_churn_count = Counter('model_no_churn_predicted_count_total', '...') # <--- INI WAJIB ADA
+
+# Di dalam fungsi predict:
+prediction = model.predict(data)
+if prediction[0] == 1:
+    churn_count.inc()
+else:
+    no_churn_count.inc() # <--- INI PENTING AGAR "NO DATA" HILANG
