@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # 1. Aplikasi Model Anda
+  model_app:
+    build: .
+    ports:
+      - "5000:5000"
+      - "8000:8000"
+    networks:
+      - monitoring-net
+
+  # 2. Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring-net
+    depends_on:
+      - model_app
+
+  # 3. Grafana (DIPERBAIKI DENGAN VOLUME)
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring-net
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+networks:
+  monitoring-net:
+
+volumes:
+  grafana_data:
