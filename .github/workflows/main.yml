@@ -36,5 +36,5 @@ jobs:
         MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
       run: |
-        # Menjalankan script modelling
-        python membangun_model/modelling.py
+        # Menjalankan training sebagai MLflow Project
+        mlflow run membangun_model --env-manager=local
