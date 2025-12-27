@@ -4,12 +4,21 @@ from sklearn.model_selection import train_test_split
 import mlflow
 import mlflow.sklearn
 import dagshub
+import os
 
 def main():
     # 1. Init DagsHub
     # Pastikan repo_owner dan repo_name sesuai dengan DagsHub Anda
     dagshub.init(repo_owner='psribuezraa', repo_name='Telco-Customer-Churn', mlflow=True)
-    mlflow.set_experiment("Telco-Churn-Autolog-Final") 
+    # mlflow.set_experiment("Telco-Churn-Autolog-Final") 
+
+    # --- PERBAIKAN BUG CI/CD ---
+    # Hapus Run ID yang dibuat otomatis oleh "mlflow run" lokal
+    # Agar saat start_run() dipanggil, dia membuat ID baru yang valid di DagsHub
+    if "MLFLOW_RUN_ID" in os.environ:
+        print("Mendeteksi MLflow Run ID lokal, menghapusnya agar tidak bentrok dengan DagsHub...")
+        os.environ.pop("MLFLOW_RUN_ID")
+    # ---------------------------
 
     # 2. Load Data
     # Menggunakan try-except agar path aman baik di Laptop maupun di GitHub Actions
@@ -25,7 +34,7 @@ def main():
     y = df['Churn']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # 3. Aktifkan Autolog (INI YANG DIMINTA REVIEWER)
+    # 3. Aktifkan Autolog
     # log_models=True artinya model akan otomatis disimpan tanpa perlu kode tambahan
     print("Mengaktifkan Autolog...")
     mlflow.sklearn.autolog(log_models=True)
