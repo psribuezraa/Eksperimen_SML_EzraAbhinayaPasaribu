@@ -1,7 +1,0 @@
-name: telco_churn_training
-
-python_env: python_env.yaml
-
-entry_points:
-  main:
-    command: "python modelling.py"

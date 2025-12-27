@@ -1,0 +1,8 @@
+name: Telco_Churn_Project
+
+# Perhatikan baris ini! Jangan python_env.yaml, tapi conda.yaml
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    command: "python membangun_model/modelling.py"
